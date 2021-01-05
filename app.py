@@ -56,7 +56,6 @@ def update_graph():
         radio = RadioButtonGroup(labels=repoNames, active=0)
         #radio.on_click(specific_repo)
         specific_repo(0)
-        print("shitsfucjdifjsoidfd")
     else:
         radio = RadioButtonGroup(labels=[])
 
@@ -65,14 +64,8 @@ def update_graph():
 
 def specific_repo(attrname):
     global graphs, repoNames, pie
-    print(repoNames)
     response = requests.get("https://api.github.com/repos/" + usernameList[-1] + "/" + repoNames[radio.active] + "/languages", auth = (username, token))
     languages = json.loads(response.text)
-
-    print(usernameList[-1])
-    print(radio.active)
-    print(repoNames[radio.active])
-    print(languages)
 
     data = pd.Series(languages).reset_index(name='value').rename(columns={'index':'lang'})
     data['angle'] = data['value']/data['value'].sum() * 2*pi
@@ -82,7 +75,6 @@ def specific_repo(attrname):
     elif len(languages) < 3:
         data['color'] = ["#1f77b4", "#aec7e8"]
     else:
-        print(len(languages))
         data['color'] = Category20[len(languages)]
 
     pie = figure(plot_height=400, title=repoNames[radio.active], toolbar_location=None, tools="hover", tooltips="@lang: @value", x_range=(-0.5, 1.0))
